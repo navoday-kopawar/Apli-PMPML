@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#3FA1AD">
+    <link rel="manifest" href="manifest.json">
+
+    <title>MAZI_PMPML-150.83_Pass</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 99vh;
+            background-color: #fadede;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .mobile-container {
+            height: inherit;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 9px 10px 19px 10px;
+            color: black;
+
+        }
+
+        .close-btn {
+            font-size: 32px;
+            font-weight: 370;
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .header-links {
+            display: flex;
+            gap: 27px;
+            font-weight: 400;
+            font-size: 15px;
+        }
+
+        .header-links a {
+            color: rgb(47, 47, 47);
+            text-decoration: underline;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+
+        .pass-card {
+            height: 582px;
+            margin: 10px 15px;
+            border-radius: 16px;
+            position: relative;
+            top: 65px;
+            background: white;
+            padding-bottom: 76px;
+            overflow: visible;
+        }
+
+        .pass-header {
+            background: #D32F2F;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .pass-header-text {
+            font-family: 'Noto Sans Devanagari', sans-serif;
+            font-size: 19px;
+            font-weight: 400;
+            line-height: 1;
+            letter-spacing: .8px;
+        }
+
+
+        .pass-container {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 10px 30px 10px;
+        }
+
+        .pass-item {
+            display: flex;
+            flex-direction: column;
+            margin: 5px 10px;
+        }
+
+        .label {
+            font-size: 15px;
+            font-weight: 400;
+            color: #989696;
+            margin-bottom: 4px;
+        }
+
+        .value {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            color: #000;
+            font-weight: 600;
+        }
+
+        .pass-item:nth-child(3) {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        .divider {
+            height: 1px;
+            background: repeating-linear-gradient(to right, #CCC 3.5px, #CCC 8px, transparent 8px, transparent 16.2px);
+            margin: 0;
+            position: relative;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            width: 24px;
+            height: 24px;
+            background: #FADEDE;
+            border-radius: 50%;
+            position: absolute;
+            top: -12px;
+            z-index: 2;
+
+        }
+
+        .divider::before {
+            left: -12px;
+        }
+
+        .divider::after {
+            right: -12px;
+        }
+
+
+        .time-details {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 15px;
+            padding: 10px 2px 0 2px;
+            gap: 20px;
+        }
+
+        .time-block {
+            padding: 0px 20px 0 0;
+        }
+
+        .time-label {
+            font-size: 15px;
+            font-weight: 400;
+            color: #989696;
+            margin-bottom: 6px;
+
+        }
+
+        .time-value {
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+        }
+
+
+        .booking-id {
+            text-align: center;
+            font-size: 13.5px;
+            font-weight: 400;
+            color: #666;
+            margin: 16px 0;
+            letter-spacing: 0;
+            padding: 0 20px;
+        }
+
+
+        .divider2 {
+            height: 1px;
+            background: repeating-linear-gradient(to right, #CCC 3.5px, #CCC 8px, transparent 8px, transparent 16.2px);
+            margin: 0.1px 0 .6px 0;
+            position: relative;
+        }
+
+
+        .one-day-pass-banner {
+            background: #D32F2F;
+            color: white;
+            text-align: center;
+            padding: 2px 0;
+            font-size: 18px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+
+        .logo-section {
+            padding: 8px 0 15px 0;
+            text-align: center;
+            background: white;
+            height: 260px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+        }
+
+        #pmpml-logo {
+            animation: breatheExact 2s infinite linear;
+        }
+
+        @keyframes breatheExact {
+            0% {
+                transform: scale(1)
+            }
+
+            50% {
+                transform: scale(0.5)
+            }
+
+            100% {
+                transform: scale(1)
+            }
+        }
+
+
+        .timer-container {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            text-align: center;
+            padding: 5px 15px;
+            background: rgba(87, 87, 87, 0.026);
+            border-top: 1px solid rgba(0, 0, 0, 0.02);
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            z-index: 3;
+        }
+
+        .expires-text {
+            color: #0c0101b3;
+            font-size: 14px;
+        }
+
+        .timer-display {
+            font-size: 14px;
+            color: #0c0101b3;
+            font-family: 'Roboto', monospace;
+            margin-left: 6px;
+        }
+
+        .expired {
+            color: #e74c3c !important;
+            font-weight: bold;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .7
+            }
+        }
+
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 5;
+            padding: 18px 15px 14px 15px;
+            background-color: #fadede;
+        }
+
+        .qr-btn {
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 7px;
+            background: #e8f5e9;
+            border: 2px solid #219653;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        #qr-icon {
+            position: relative;
+            right: 19px;
+        }
+
+        .qr-btn>p {
+            color: #219653;
+            font-size: medium;
+            font-weight: 500;
+            position: relative;
+            right: 19px;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .3s, visibility .3s;
+            z-index: 1000;
+        }
+
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .square-container {
+            width: 250px;
+            height: 250px;
+            background: white;
+            position: relative;
+            padding: 22px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 4px;
+            transform: scale(.9);
+            transition: transform .3s;
+        }
+
+        .modal-overlay.visible .square-container {
+            transform: scale(1);
+        }
+
+        .square-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .close-btn2 {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 20px;
+            color: #474747;
+            cursor: pointer;
+            z-index: 10;
+            line-height: 1;
+            user-select: none;
+            transition: color .2s;
+        }
+
+        .close-btn2:hover {
+            color: #000;
+        }
+
+
+        /* ================= HELP FORM CONTAINER ================= */
+
+        .help-container {
+            position: relative;
+            width: 90%;
+            max-width: 340px;
+            background: #ffffff;
+            padding: 22px 18px 20px;
+            border-radius: 14px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+            animation: scaleIn 0.22s ease-out;
+        }
+
+        /* ================= CLOSE BUTTON ================= */
+
+        .help-container .close-btn2 {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            font-size: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f3f3f3;
+            color: #444;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.2s ease, transform 0.12s ease;
+        }
+
+        .help-container .close-btn2:hover {
+            background: #f9a9a9;
+        }
+
+        .help-container .close-btn2:active {
+            transform: scale(0.9);
+        }
+
+        /* ================= FORM LAYOUT ================= */
+
+        #helpForm {
+            margin-top: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        /* ================= LABELS ================= */
+
+        #helpForm label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #444;
+        }
+
+        /* ================= INPUT FIELDS ================= */
+
+        #helpForm input {
+            width: 100%;
+            height: 40px;
+            padding: 0 12px;
+            font-size: 14px;
+            border-radius: 8px;
+            border: 1.5px solid #ccc;
+            outline: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        #helpForm input:focus {
+            border-color: #219653;
+            box-shadow: 0 0 0 2px rgba(33, 150, 83, 0.15);
+        }
+
+        /* ================= BUTTONS ================= */
+
+        #helpForm button {
+            height: 40px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+
+        /* APPLY BUTTON */
+
+        #helpForm button[type="submit"] {
+            background: #219653;
+            color: #ffffff;
+            margin-top: 6px;
+        }
+
+        #helpForm button[type="submit"]:active {
+            transform: scale(0.97);
+        }
+
+        /* RESET BUTTON */
+
+        #resetPassBtn {
+            background: #fff4f4;
+            color: #c62828;
+            border: 1.5px solid #ef9a9a;
+        }
+
+        #resetPassBtn:active {
+            transform: scale(0.97);
+        }
+
+        /* ================= ENTRY ANIMATION ================= */
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.92);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+
+
+<body>
+    <div id="passPage" class="mobile-container">
+        <div class="header">
+            <div class="close-btn" onclick="goBackToForm()">×</div>
+            <div class="header-links">
+                <a href="javascript:void(0)" id="needHelpBtn">Need Help?</a>
+
+
+                <a href="#">All passes</a>
+            </div>
+        </div>
+
+        <div class="pass-card">
+            <div class="pass-header">
+                <div class="pass-header-text">पुणे महानगर परिवहन महामंडळ लि.</div>
+            </div>
+
+            <div class="pass-container">
+                <div class="pass-item">
+                    <span class="label">Pass Type</span>
+                    <span class="value">All Route</span>
+                </div>
+                <div class="pass-item">
+                    <span class="label">ID</span>
+                    <span class="value" id="passId">9240</span>
+
+                </div>
+                <div class="pass-item">
+                    <span class="label">Fare</span>
+                    <span class="value">₹150.8<br>3</span>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="time-details">
+                <div class="time-block">
+                    <div class="time-label">Booking Time</div>
+                    <div class="time-value" id="passBookingTime">--</div>
+                </div>
+                <div class="time-block">
+                    <div class="time-label">Validity Time</div>
+                    <div class="time-value" id="passValidityTime">--</div>
+                </div>
+            </div>
+
+            <div class="booking-id" id="passGeneratedId">----------------</div>
+
+            <div class="divider2"></div>
+
+            <div class="one-day-pass-banner">One Day Pass</div>
+
+            <div class="logo-section">
+                <img src="https://i.ibb.co/yB7dX7vg/PMPML-LOGO.png" width="200" height="200" id="pmpml-logo" alt="logo">
+            </div>
+
+
+            <div class="timer-container">
+                <span class="expires-text">Expires in</span>
+                <span id="timerDisplay" class="timer-display">16:00:00</span>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <div onclick="showContainer()" class="qr-btn">
+                <img src="https://i.ibb.co/q30fQSTR/QRButton.png" alt="" width="30" height="30" id="qr-icon">
+                <p>Show QR code</p>
+            </div>
+        </footer>
+
+        <div class="modal-overlay" id="myModal">
+            <div class="square-container">
+                <div class="close-btn2" onclick="closeContainer()">&#x2715;</div>
+                <img src="https://i.ibb.co/XkF1kVbV/Show-QR.jpg" alt="QR Code">
+            </div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="helpModal">
+        <div class="help-container">
+            <div class="close-btn2" onclick="toggleHelp(false)">✕</div>
+
+            <form id="helpForm">
+                <label>Pass Background Color</label>
+                <input id="colorInput" type="text" placeholder="FADEDE" required>
+
+                <label>Pass ID</label>
+                <input id="idInput" type="text" maxlength="4" required>
+
+                <label>Date</label>
+                <input id="dateInput" type="date" required>
+
+                <label>Time</label>
+                <input id="timeInput" type="time" required>
+
+                <button type="submit">Apply</button>
+                <button type="button" id="resetPassBtn">Reset Pass</button>
+
+            </form>
+        </div>
+    </div>
+
+<script>
+/* ================= STATE ================= */
+
+const passState = {
+    color: '#FADEDE',
+    passId: '9240',
+    date: new Date(),
+    time: null
+};
+
+const STORAGE_KEY = "pmpml_pass_state";
+let countdownInterval;
+
+/* ================= ELEMENTS ================= */
+
+const modal = document.getElementById('myModal');
+const helpModal = document.getElementById("helpModal");
+const needHelpBtn = document.getElementById("needHelpBtn");
+const helpForm = document.getElementById("helpForm");
+const resetPassBtn = document.getElementById("resetPassBtn");
+
+let colorInput = document.getElementById("colorInput");
+let idInput = document.getElementById("idInput");
+let dateInput = document.getElementById("dateInput");
+let timeInput = document.getElementById("timeInput");
+
+/* ================= HELP MODAL ================= */
+
+function toggleHelp(show) {
+    helpModal.classList.toggle("visible", show);
+}
+
+/* ================= QR MODAL (UNCHANGED) ================= */
+
+function showContainer() {
+    modal.classList.add('visible');
+    modal.addEventListener('click', handleModalClick);
+}
+
+function closeContainer() {
+    modal.classList.remove('visible');
+    modal.removeEventListener('click', handleModalClick);
+}
+
+function handleModalClick(e) {
+    if (e.target === modal) closeContainer();
+}
+
+/* ================= STORAGE ================= */
+
+function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(passState));
+}
+
+function loadState() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+
+    try {
+        const data = JSON.parse(saved);
+        passState.color = data.color;
+        passState.passId = data.passId;
+        passState.date = new Date(data.date);
+        passState.time = data.time;
+    } catch {}
+}
+
+/* ================= UTILITIES ================= */
+
+function generateRandomChars(n) {
+    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let r = '';
+    for (let i = 0; i < n; i++) {
+        r += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return r;
+}
+function formatDate(date, format) {
+    const yy = String(date.getFullYear()).slice(-2);
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    const hh = String(date.getHours()).padStart(2, '0');
+    const min = String(date.getMinutes()).padStart(2, '0');
+
+    if (format === 'id') {
+        // ✅ YYMMDDHHMM (EXACT)
+        return `${yy}${mm}${dd}${hh}${min}`;
+    }
+
+    const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    const mo = months[date.getMonth()];
+    const hh12 = hh % 12 === 0 ? 12 : hh % 12;
+    const ampm = hh >= 12 ? 'PM' : 'AM';
+
+    return `${dd} ${mo}, ${yy} | ${String(hh12).padStart(2,'0')}:${min} ${ampm}`;
+}
+
+function applyPassColor(color) {
+    document.body.style.backgroundColor = color;
+
+    const pass = document.getElementById('passPage');
+    pass.style.backgroundColor = color;
+    pass.querySelector('.header').style.backgroundColor = color;
+    pass.querySelector('.footer').style.backgroundColor = color;
+
+    const old = document.getElementById('dynamic-color-style');
+    if (old) old.remove();
+
+    const s = document.createElement('style');
+    s.id = 'dynamic-color-style';
+    s.textContent = `
+        .divider::before,
+        .divider::after,
+        .divider2::before,
+        .divider2::after {
+            background:${color}!important;
+        }
+    `;
+    document.head.appendChild(s);
+}
+
+/* ================= DATE INPUT HARD RESET ================= */
+
+function forceSetDateInput(input, value) {
+    const parent = input.parentNode;
+    const fresh = input.cloneNode(true);
+    fresh.value = value;
+    parent.replaceChild(fresh, input);
+    return fresh;
+}
+
+/* ================= COUNTDOWN ================= */
+
+function startCountdownFromFixedSeconds(totalSeconds) {
+    const t = document.getElementById("timerDisplay");
+    if (countdownInterval) clearInterval(countdownInterval);
+
+    let remaining = Math.floor(totalSeconds);
+
+    function tick() {
+        if (remaining <= 0) {
+            t.textContent = "00:00:00";
+            t.classList.add("expired");
+            clearInterval(countdownInterval);
+            return;
+        }
+
+        const hh = Math.floor(remaining / 3600);
+        const mm = Math.floor((remaining % 3600) / 60);
+        const ss = remaining % 60;
+
+        t.textContent =
+            `${String(hh).padStart(2,'0')}:` +
+            `${String(mm).padStart(2,'0')}:` +
+            `${String(ss).padStart(2,'0')}`;
+
+        remaining--;
+    }
+
+    tick();
+    countdownInterval = setInterval(tick, 1000);
+}
+
+/* ================= UPDATE PASS ================= */
+
+function updatePass() {
+    document.getElementById("passId").textContent = passState.passId;
+    applyPassColor(passState.color);
+
+    const bookingDate = new Date(passState.date);
+
+    if (passState.time) {
+        const [hh, mm] = passState.time.split(":");
+        bookingDate.setHours(hh, mm, 0, 0);
+    }
+
+    const validityDate = new Date(bookingDate);
+    validityDate.setHours(23, 59, 0, 0);
+
+    document.getElementById("passBookingTime").textContent =
+        formatDate(bookingDate, "pass");
+
+    document.getElementById("passValidityTime").textContent =
+        formatDate(validityDate, "pass");
+
+    document.getElementById("passGeneratedId").textContent =
+        `${formatDate(bookingDate, "id")}${generateRandomChars(6)}`;
+
+    const remainingSeconds =
+        Math.floor((validityDate - bookingDate) / 1000);
+
+    if (remainingSeconds > 0) {
+        startCountdownFromFixedSeconds(remainingSeconds);
+    } else {
+        const t = document.getElementById("timerDisplay");
+        t.textContent = "00:00:00";
+        t.classList.add("expired");
+    }
+}
+
+/* ================= EVENTS ================= */
+
+needHelpBtn.addEventListener("click", () => {
+    const now = new Date();
+
+    colorInput.value = passState.color.replace("#", "");
+    idInput.value = passState.passId;
+
+    dateInput = forceSetDateInput(
+        dateInput,
+        now.toISOString().split("T")[0]
+    );
+
+    timeInput.value = passState.time || now.toTimeString().slice(0,5);
+
+    toggleHelp(true);
+});
+
+helpForm.addEventListener("submit", e => {
+    e.preventDefault();
+
+    if (!/^[0-9A-Fa-f]{6}$/.test(colorInput.value)) {
+        alert("Invalid hex color");
+        return;
+    }
+
+    if (!/^\d{4}$/.test(idInput.value)) {
+        alert("Invalid pass ID");
+        return;
+    }
+
+    passState.color = "#" + colorInput.value.toUpperCase();
+    passState.passId = idInput.value;
+    passState.date = new Date(dateInput.value);
+    passState.time = timeInput.value;
+
+    saveState();
+    updatePass();
+    toggleHelp(false);
+});
+
+resetPassBtn.addEventListener("click", () => {
+    localStorage.removeItem(STORAGE_KEY);
+
+    const now = new Date();
+    passState.color = "#FADEDE";
+    passState.passId = "9240";
+    passState.date = now;
+    passState.time = null;
+
+    dateInput = forceSetDateInput(
+        dateInput,
+        now.toISOString().split("T")[0]
+    );
+
+    updatePass();
+    toggleHelp(false);
+});
+
+/* ================= INIT ================= */
+
+window.addEventListener("load", () => {
+    loadState();
+    updatePass();
+});
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("service-worker.js");
+  });
+}
+</script>
+
+
+</body>
+
+</html>
