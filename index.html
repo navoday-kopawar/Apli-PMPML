@@ -4,7 +4,9 @@
 <head>
 
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <meta name="theme-color" content="#3FA1AD">
     <link rel="manifest" href="manifest.json">
 
@@ -14,7 +16,16 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+             -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
         }
+html, body {
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: manipulation;
+}
 
         body {
             height: 99vh;
@@ -882,6 +893,42 @@ window.addEventListener("load", () => {
     updatePass();
 });
 </script>
+
+<script>
+/* 🔒 Disable Refresh, Zoom, Copy */
+document.addEventListener("keydown", function (e) {
+    // Refresh keys
+    if (
+        e.key === "F5" ||
+        (e.ctrlKey && e.key.toLowerCase() === "r") ||
+        (e.ctrlKey && e.key.toLowerCase() === "p") || // print
+        (e.ctrlKey && e.key === "+") ||
+        (e.ctrlKey && e.key === "-") ||
+        (e.ctrlKey && e.key === "0")
+    ) {
+        e.preventDefault();
+        return false;
+    }
+
+    // PrintScreen
+    if (e.key === "PrintScreen") {
+        navigator.clipboard.writeText("");
+        alert("Screenshot disabled");
+        return false;
+    }
+});
+
+/* 🔒 Disable Right Click */
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+/* 🔒 Disable Zoom by Gesture */
+document.addEventListener("gesturestart", e => e.preventDefault());
+document.addEventListener("gesturechange", e => e.preventDefault());
+document.addEventListener("gestureend", e => e.preventDefault());
+</script>
+
+
+    
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
@@ -892,5 +939,6 @@ if ("serviceWorker" in navigator) {
 
 
 </body>
+
 
 </html>
