@@ -31,6 +31,7 @@ html, body {
             height: 100vh;
             background-color: #fadede;
             font-family: 'Roboto', sans-serif;
+             overscroll-behavior-y: contain;
         }
 
         .mobile-container {
@@ -930,8 +931,17 @@ document.addEventListener("gesturechange", e => e.preventDefault());
 document.addEventListener("gestureend", e => e.preventDefault());
 </script>
 
+ 
+    <script>
+document.addEventListener("gesturestart", e => e.preventDefault());
+document.addEventListener("gesturechange", e => e.preventDefault());
+document.addEventListener("gestureend", e => e.preventDefault());
 
-    
+document.addEventListener("wheel", e => {
+    if (e.ctrlKey) e.preventDefault();
+}, { passive: false });
+</script>
+ 
  <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
@@ -945,6 +955,7 @@ if ("serviceWorker" in navigator) {
 
 
 </html>
+
 
 
 
