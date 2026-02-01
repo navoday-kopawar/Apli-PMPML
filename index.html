@@ -4,8 +4,7 @@
 <head>
 
     <meta charset="UTF-8" />
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
     <meta name="theme-color" content="#3FA1AD">
     <link rel="manifest" href="manifest.json">
@@ -16,27 +15,29 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-             -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
-html, body {
-    overflow: hidden;
-    overscroll-behavior: none;
-    touch-action: manipulation;
-}
+
+        html,
+        body {
+            overflow: hidden;
+            overscroll-behavior: none;
+            touch-action: manipulation;
+        }
 
         body {
             height: 100vh;
             background-color: #fadede;
             font-family: 'Roboto', sans-serif;
-             overscroll-behavior-y: contain;
+            overscroll-behavior-y: contain;
         }
 
         .mobile-container {
             height: inherit;
-               overscroll-behavior: none;
+            overscroll-behavior: none;
         }
 
         .header {
@@ -45,7 +46,7 @@ html, body {
             align-items: center;
             padding: 9px 10px 19px 10px;
             color: black;
-
+ margin-bottom: 14px;
         }
 
         .close-btn {
@@ -75,10 +76,10 @@ html, body {
 
         .pass-card {
             height: 582px;
-            margin: 10px 15px;
+            margin: 0 15px;
             border-radius: 16px;
             position: relative;
-            top: 0px;
+            
             background: white;
             padding-bottom: 76px;
             overflow: visible;
@@ -540,7 +541,7 @@ html, body {
             </div>
         </div>
 
-        <div class="pass-card">
+        <div class="pass-card" >
             <div class="pass-header">
                 <div class="pass-header-text">पुणे महानगर परिवहन महामंडळ लि.</div>
             </div>
@@ -629,326 +630,336 @@ html, body {
         </div>
     </div>
 
-<script>
-/* ================= STATE ================= */
+    <script>
+        /* ================= STATE ================= */
 
 
-const passState = {
-    color: '#FADEDE',
-    passId: '9240',
-    date: new Date(),
-    time: null
-};
+        const passState = {
+            color: '#FADEDE',
+            passId: '9240',
+            bookingTimestamp: null
+        };
 
-const STORAGE_KEY = "pmpml_pass_state";
-let countdownInterval;
 
-/* ================= ELEMENTS ================= */
+        const STORAGE_KEY = "pmpml_pass_state";
+        let countdownInterval;
 
-const modal = document.getElementById('myModal');
-const helpModal = document.getElementById("helpModal");
-const needHelpBtn = document.getElementById("needHelpBtn");
-const helpForm = document.getElementById("helpForm");
-const resetPassBtn = document.getElementById("resetPassBtn");
+        /* ================= ELEMENTS ================= */
 
-let colorInput = document.getElementById("colorInput");
-let idInput = document.getElementById("idInput");
-let dateInput = document.getElementById("dateInput");
-let timeInput = document.getElementById("timeInput");
+        const modal = document.getElementById('myModal');
+        const helpModal = document.getElementById("helpModal");
+        const needHelpBtn = document.getElementById("needHelpBtn");
+        const helpForm = document.getElementById("helpForm");
+        const resetPassBtn = document.getElementById("resetPassBtn");
 
-/* ================= HELP MODAL ================= */
+        let colorInput = document.getElementById("colorInput");
+        let idInput = document.getElementById("idInput");
+        let dateInput = document.getElementById("dateInput");
+        let timeInput = document.getElementById("timeInput");
 
-function toggleHelp(show) {
-    helpModal.classList.toggle("visible", show);
-}
+        /* ================= HELP MODAL ================= */
 
-/* ================= QR MODAL (UNCHANGED) ================= */
-
-function showContainer() {
-    modal.classList.add('visible');
-    modal.addEventListener('click', handleModalClick);
-}
-
-function closeContainer() {
-    modal.classList.remove('visible');
-    modal.removeEventListener('click', handleModalClick);
-}
-
-function handleModalClick(e) {
-    if (e.target === modal) closeContainer();
-}
-
-/* ================= STORAGE ================= */
-
-function saveState() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(passState));
-}
-
-function loadState() {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) return;
-
-    try {
-        const data = JSON.parse(saved);
-        passState.color = data.color;
-        passState.passId = data.passId;
-        passState.date = new Date(data.date);
-        passState.time = data.time;
-    } catch {}
-}
-
-/* ================= UTILITIES ================= */
-
-function generateRandomChars(n) {
-    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let r = '';
-    for (let i = 0; i < n; i++) {
-        r += chars[Math.floor(Math.random() * chars.length)];
-    }
-    return r;
-}
-function formatDate(date, format) {
-    const yy = String(date.getFullYear()).slice(-2);
-    const mm = String(date.getMonth() + 1).padStart(2, '0');
-    const dd = String(date.getDate()).padStart(2, '0');
-    const hh = String(date.getHours()).padStart(2, '0');
-    const min = String(date.getMinutes()).padStart(2, '0');
-
-    if (format === 'id') {
-        // ✅ YYMMDDHHMM (EXACT)
-        return `${yy}${mm}${dd}${hh}${min}`;
-    }
-
-    const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-    const mo = months[date.getMonth()];
-    const hh12 = hh % 12 === 0 ? 12 : hh % 12;
-    const ampm = hh >= 12 ? 'PM' : 'AM';
-
-    return `${dd} ${mo}, ${yy} | ${String(hh12).padStart(2,'0')}:${min} ${ampm}`;
-}
-
-function applyPassColor(color) {
-    document.body.style.backgroundColor = color;
-
-    const pass = document.getElementById('passPage');
-    pass.style.backgroundColor = color;
-    pass.querySelector('.header').style.backgroundColor = color;
-    pass.querySelector('.footer').style.backgroundColor = color;
-pass.querySelector('.footer').style.backgroundColor = color;
-
-    const old = document.getElementById('dynamic-color-style');
-    if (old) old.remove();
-
-    const s = document.createElement('style');
-    s.id = 'dynamic-color-style';
-    s.textContent = `
-.divider::before,
-.divider::after {
-    background: ${color} !important;
-}
-`;
-
-    document.head.appendChild(s);
-}
-
-/* ================= DATE INPUT HARD RESET ================= */
-
-function forceSetDateInput(input, value) {
-    const parent = input.parentNode;
-    const fresh = input.cloneNode(true);
-    fresh.value = value;
-    parent.replaceChild(fresh, input);
-    return fresh;
-}
-
-/* ================= COUNTDOWN ================= */
-
-function startCountdownFromFixedSeconds(totalSeconds) {
-    const t = document.getElementById("timerDisplay");
-    if (countdownInterval) clearInterval(countdownInterval);
-
-    let remaining = Math.floor(totalSeconds);
-
-    function tick() {
-        if (remaining <= 0) {
-            t.textContent = "00:00:00";
-            t.classList.add("expired");
-            clearInterval(countdownInterval);
-            return;
+        function toggleHelp(show) {
+            helpModal.classList.toggle("visible", show);
         }
 
-        const hh = Math.floor(remaining / 3600);
-        const mm = Math.floor((remaining % 3600) / 60);
-        const ss = remaining % 60;
+        /* ================= QR MODAL (UNCHANGED) ================= */
 
-        t.textContent =
-            `${String(hh).padStart(2,'0')}:` +
-            `${String(mm).padStart(2,'0')}:` +
-            `${String(ss).padStart(2,'0')}`;
+        function showContainer() {
+            modal.classList.add('visible');
+            modal.addEventListener('click', handleModalClick);
+        }
 
-        remaining--;
-    }
+        function closeContainer() {
+            modal.classList.remove('visible');
+            modal.removeEventListener('click', handleModalClick);
+        }
 
-    tick();
-    countdownInterval = setInterval(tick, 1000);
-}
+        function handleModalClick(e) {
+            if (e.target === modal) closeContainer();
+        }
 
-/* ================= UPDATE PASS ================= */
+        /* ================= STORAGE ================= */
 
-function updatePass() {
-    document.getElementById("passId").textContent = passState.passId;
-    applyPassColor(passState.color);
+        function saveState() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(passState));
+        }
 
-    const bookingDate = new Date(passState.date);
+        function loadState() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
 
-    if (passState.time) {
-        const [hh, mm] = passState.time.split(":");
-        bookingDate.setHours(hh, mm, 0, 0);
-    }
+            try {
+                const data = JSON.parse(saved);
+                passState.color = data.color;
+                passState.passId = data.passId;
+                passState.bookingTimestamp = data.bookingTimestamp;
 
-    const validityDate = new Date(bookingDate);
-    validityDate.setHours(23, 59, 0, 0);
+            } catch { }
+        }
 
-    document.getElementById("passBookingTime").textContent =
-        formatDate(bookingDate, "pass");
+        /* ================= UTILITIES ================= */
 
-    document.getElementById("passValidityTime").textContent =
-        formatDate(validityDate, "pass");
+        function generateRandomChars(n) {
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let r = '';
+            for (let i = 0; i < n; i++) {
+                r += chars[Math.floor(Math.random() * chars.length)];
+            }
+            return r;
+        }
+        function formatDate(date, format) {
+            const yy = String(date.getFullYear()).slice(-2);
+            const mm = String(date.getMonth() + 1).padStart(2, '0');
+            const dd = String(date.getDate()).padStart(2, '0');
+            const hh = String(date.getHours()).padStart(2, '0');
+            const min = String(date.getMinutes()).padStart(2, '0');
 
-    document.getElementById("passGeneratedId").textContent =
-        `${formatDate(bookingDate, "id")}${generateRandomChars(6)}`;
+            if (format === 'id') {
+                // ✅ YYMMDDHHMM (EXACT)
+                return `${yy}${mm}${dd}${hh}${min}`;
+            }
 
-    const remainingSeconds =
-        Math.floor((validityDate - bookingDate) / 1000);
+            const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+            const mo = months[date.getMonth()];
+            const hh12 = hh % 12 === 0 ? 12 : hh % 12;
+            const ampm = hh >= 12 ? 'PM' : 'AM';
 
-    if (remainingSeconds > 0) {
-        startCountdownFromFixedSeconds(remainingSeconds);
-    } else {
-        const t = document.getElementById("timerDisplay");
-        t.textContent = "00:00:00";
-        t.classList.add("expired");
-    }
-}
+            return `${dd} ${mo}, ${yy} | ${String(hh12).padStart(2, '0')}:${min} ${ampm}`;
+        }
 
-/* ================= EVENTS ================= */
+        function applyPassColor(color) {
+            document.body.style.backgroundColor = color;
 
-needHelpBtn.addEventListener("click", () => {
-    const now = new Date();
+            const pass = document.getElementById('passPage');
+            pass.style.backgroundColor = color;
+            pass.querySelector('.header').style.backgroundColor = color;
 
-    colorInput.value = passState.color.replace("#", "");
-    idInput.value = passState.passId;
+            pass.querySelector('.footer').style.backgroundColor = color;
 
-  dateInput = forceSetDateInput(
-    dateInput,
-    passState.date.toISOString().split("T")[0]
-);
+            const old = document.getElementById('dynamic-color-style');
+            if (old) old.remove();
+
+            const s = document.createElement('style');
+            s.id = 'dynamic-color-style';
+            s.textContent = `
+                         .divider::before,
+                         .divider::after {
+                          background: ${color} !important;
+                      }
+                      `;
+
+            document.head.appendChild(s);
+        }
+
+        /* ================= DATE INPUT HARD RESET ================= */
+
+        function forceSetDateInput(input, value) {
+            const parent = input.parentNode;
+            const fresh = input.cloneNode(true);
+            fresh.value = value;
+            parent.replaceChild(fresh, input);
+            return fresh;
+        }
+
+        /* ================= COUNTDOWN ================= */
+
+        function startCountdown(expiryTimestamp) {
+            const t = document.getElementById("timerDisplay");
+            if (countdownInterval) clearInterval(countdownInterval);
+
+            function tick() {
+                const remaining = Math.floor((expiryTimestamp - Date.now()) / 1000);
+
+                if (remaining <= 0) {
+                    t.textContent = "00:00:00";
+                    t.classList.add("expired");
+                    clearInterval(countdownInterval);
+                    return;
+                }
+
+                const hh = Math.floor(remaining / 3600);
+                const mm = Math.floor((remaining % 3600) / 60);
+                const ss = remaining % 60;
+
+                t.textContent =
+                    `${String(hh).padStart(2, '0')}:` +
+                    `${String(mm).padStart(2, '0')}:` +
+                    `${String(ss).padStart(2, '0')}`;
+            }
+
+            tick();
+            countdownInterval = setInterval(tick, 1000);
+        }
+
+        /* ================= UPDATE PASS ================= */
+
+        function updatePass() {
+            document.getElementById("passId").textContent = passState.passId;
+            applyPassColor(passState.color);
+
+            const bookingDate = new Date(passState.bookingTimestamp);
 
 
-    timeInput.value = passState.time || now.toTimeString().slice(0,5);
+            const validityDate = new Date(bookingDate);
+            validityDate.setHours(23, 59, 0, 0);
 
-    toggleHelp(true);
-});
+            document.getElementById("passBookingTime").textContent =
+                formatDate(bookingDate, "pass");
 
-helpForm.addEventListener("submit", e => {
-    e.preventDefault();
+            document.getElementById("passValidityTime").textContent =
+                formatDate(validityDate, "pass");
 
-    if (!/^[0-9A-Fa-f]{6}$/.test(colorInput.value)) {
-        alert("Invalid hex color");
-        return;
-    }
+            document.getElementById("passGeneratedId").textContent =
+                `${formatDate(bookingDate, "id")}${generateRandomChars(6)}`;
 
-    if (!/^\d{4}$/.test(idInput.value)) {
-        alert("Invalid pass ID");
-        return;
-    }
+            if (validityDate.getTime() > Date.now()) {
+                startCountdown(validityDate.getTime());
+            }
+            else {
+                const t = document.getElementById("timerDisplay");
+                t.textContent = "00:00:00";
+                t.classList.add("expired");
+            }
+        }
 
-    passState.color = "#" + colorInput.value.toUpperCase();
-    passState.passId = idInput.value;
-    passState.date = new Date(dateInput.value);
-    passState.time = timeInput.value;
 
-    saveState();
-    updatePass();
-    toggleHelp(false);
-});
+        function goBackToForm() {
+            window.history.back();
+        }
 
-resetPassBtn.addEventListener("click", () => {
-    localStorage.removeItem(STORAGE_KEY);
 
-    const now = new Date();
-    passState.color = "#FADEDE";
-    passState.passId = "9240";
-    passState.date = now;
-    passState.time = null;
+        /* ================= EVENTS ================= */
 
-    dateInput = forceSetDateInput(
-        dateInput,
-        now.toISOString().split("T")[0]
-    );
+        needHelpBtn.addEventListener("click", () => {
+            const now = new Date();
 
-    updatePass();
-    toggleHelp(false);
-});
+            colorInput.value = passState.color.replace("#", "");
+            idInput.value = passState.passId;
 
-/* ================= INIT ================= */
+            const bookingDate = new Date(passState.bookingTimestamp);
 
-window.addEventListener("load", () => {
-    loadState();
-    updatePass();
-});
-</script>
+            dateInput = forceSetDateInput(
+                dateInput,
+                bookingDate.toISOString().split("T")[0]
+            );
 
-<script>
-/* 🔒 Disable Refresh, Zoom, Copy */
-document.addEventListener("keydown", function (e) {
-    // Refresh keys
-    if (
-        e.key === "F5" ||
-        (e.ctrlKey && e.key.toLowerCase() === "r") ||
-        (e.ctrlKey && e.key.toLowerCase() === "p") || // print
-        (e.ctrlKey && e.key === "+") ||
-        (e.ctrlKey && e.key === "-") ||
-        (e.ctrlKey && e.key === "0")
-    ) {
-        e.preventDefault();
-        return false;
-    }
+            timeInput.value = bookingDate.toTimeString().slice(0, 5);
 
-    // PrintScreen
-    if (e.key === "PrintScreen") {
-        navigator.clipboard.writeText("");
-        alert("Screenshot disabled");
-        return false;
-    }
-});
+            toggleHelp(true);
+        });
 
-/* 🔒 Disable Right Click */
-document.addEventListener("contextmenu", e => e.preventDefault());
+        helpForm.addEventListener("submit", e => {
+            e.preventDefault();
 
-/* 🔒 Disable Zoom by Gesture */
-document.addEventListener("gesturestart", e => e.preventDefault());
-document.addEventListener("gesturechange", e => e.preventDefault());
-document.addEventListener("gestureend", e => e.preventDefault());
-</script>
+            if (!/^[0-9A-Fa-f]{6}$/.test(colorInput.value)) {
+                alert("Invalid hex color");
+                return;
+            }
 
- 
+            if (!/^\d{4}$/.test(idInput.value)) {
+                alert("Invalid pass ID");
+                return;
+            }
+
+            passState.color = "#" + colorInput.value.toUpperCase();
+            passState.passId = idInput.value;
+
+            const selectedDate = new Date(dateInput.value);
+            const [hh, mm] = timeInput.value.split(":");
+            selectedDate.setHours(hh, mm, 0, 0);
+
+            passState.bookingTimestamp = selectedDate.getTime();
+
+
+            saveState();
+            updatePass();
+            toggleHelp(false);
+        });
+
+        resetPassBtn.addEventListener("click", () => {
+            localStorage.removeItem(STORAGE_KEY);
+
+            const now = Date.now();
+            passState.color = "#FADEDE";
+            passState.passId = "9240";
+            passState.bookingTimestamp = now;
+
+
+            dateInput = forceSetDateInput(
+                dateInput,
+                new Date(passState.bookingTimestamp).toISOString().split("T")[0]
+            );
+
+
+            updatePass();
+            toggleHelp(false);
+        });
+
+        /* ================= INIT ================= */
+
+        window.addEventListener("load", () => {
+            loadState();
+
+            if (!passState.bookingTimestamp) {
+                passState.bookingTimestamp = Date.now();
+                saveState();
+            }
+
+            updatePass();
+
+        });
+    </script>
+
     <script>
-document.addEventListener("gesturestart", e => e.preventDefault());
-document.addEventListener("gesturechange", e => e.preventDefault());
-document.addEventListener("gestureend", e => e.preventDefault());
+        /* 🔒 Disable Refresh, Zoom, Copy */
+        document.addEventListener("keydown", function (e) {
+            // Refresh keys
+            if (
+                e.key === "F5" ||
+                (e.ctrlKey && e.key.toLowerCase() === "r") ||
+                (e.ctrlKey && e.key.toLowerCase() === "p") || // print
+                (e.ctrlKey && e.key === "+") ||
+                (e.ctrlKey && e.key === "-") ||
+                (e.ctrlKey && e.key === "0")
+            ) {
+                e.preventDefault();
+                return false;
+            }
 
-document.addEventListener("wheel", e => {
-    if (e.ctrlKey) e.preventDefault();
-}, { passive: false });
-</script>
- 
- <script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("service-worker.js");
-  });
-}
-</script>
+            // PrintScreen
+            if (e.key === "PrintScreen") {
+                navigator.clipboard.writeText("");
+                alert("Screenshot disabled");
+                return false;
+            }
+        });
+
+        /* 🔒 Disable Right Click */
+        document.addEventListener("contextmenu", e => e.preventDefault());
+
+        /* 🔒 Disable Zoom by Gesture */
+        document.addEventListener("gesturestart", e => e.preventDefault());
+        document.addEventListener("gesturechange", e => e.preventDefault());
+        document.addEventListener("gestureend", e => e.preventDefault());
+    </script>
+
+
+    <script>
+
+
+        document.addEventListener("wheel", e => {
+            if (e.ctrlKey) e.preventDefault();
+        }, { passive: false });
+    </script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("service-worker.js");
+            });
+        }
+    </script>
 
 
 </body>
