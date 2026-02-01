@@ -629,6 +629,8 @@ html, body {
 
 <script>
 /* ================= STATE ================= */
+localStorage.removeItem("pmpml_pass_state");
+location.reload();
 
 const passState = {
     color: '#FADEDE',
@@ -731,6 +733,7 @@ function applyPassColor(color) {
     pass.style.backgroundColor = color;
     pass.querySelector('.header').style.backgroundColor = color;
     pass.querySelector('.footer').style.backgroundColor = color;
+pass.querySelector('.footer').style.backgroundColor = color;
 
     const old = document.getElementById('dynamic-color-style');
     if (old) old.remove();
@@ -738,11 +741,11 @@ function applyPassColor(color) {
     const s = document.createElement('style');
     s.id = 'dynamic-color-style';
     s.textContent = `
-        .divider::before,
-        .divider::after,
-        .divider2::before,
-        .divider2::after {
-            background:${color}!important;
+      .divider::before,
+.divider::after {
+    background:${color}!important;
+}
+  background:${color}!important;
         }
     `;
     document.head.appendChild(s);
@@ -835,10 +838,11 @@ needHelpBtn.addEventListener("click", () => {
     colorInput.value = passState.color.replace("#", "");
     idInput.value = passState.passId;
 
-    dateInput = forceSetDateInput(
-        dateInput,
-        now.toISOString().split("T")[0]
-    );
+  dateInput = forceSetDateInput(
+    dateInput,
+    passState.date.toISOString().split("T")[0]
+);
+
 
     timeInput.value = passState.time || now.toTimeString().slice(0,5);
 
@@ -942,6 +946,7 @@ if ("serviceWorker" in navigator) {
 
 
 </html>
+
 
 
 
