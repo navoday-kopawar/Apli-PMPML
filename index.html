@@ -35,6 +35,7 @@ html, body {
 
         .mobile-container {
             height: inherit;
+               overscroll-behavior: none;
         }
 
         .header {
@@ -629,8 +630,7 @@ html, body {
 
 <script>
 /* ================= STATE ================= */
-localStorage.removeItem("pmpml_pass_state");
-location.reload();
+
 
 const passState = {
     color: '#FADEDE',
@@ -946,6 +946,7 @@ if ("serviceWorker" in navigator) {
 
 
 </html>
+
 
 
 
