@@ -741,13 +741,12 @@ pass.querySelector('.footer').style.backgroundColor = color;
     const s = document.createElement('style');
     s.id = 'dynamic-color-style';
     s.textContent = `
-      .divider::before,
+.divider::before,
 .divider::after {
-    background:${color}!important;
+    background: ${color} !important;
 }
-  background:${color}!important;
-        }
-    `;
+`;
+
     document.head.appendChild(s);
 }
 
@@ -946,6 +945,7 @@ if ("serviceWorker" in navigator) {
 
 
 </html>
+
 
 
 
