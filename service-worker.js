@@ -1,4 +1,4 @@
-const CACHE_NAME = "pmpml-pass-v1";
+const CACHE_NAME = "pmpml-pass-v2";
 
 const FILES_TO_CACHE = [
   "./",
@@ -37,3 +37,4 @@ self.addEventListener("fetch", event => {
     })
   );
 });
+
