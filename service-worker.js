@@ -1,11 +1,12 @@
-const CACHE_NAME = "pmpml-pass-v4";
+const CACHE_NAME = "pmpml-pass-v6";
+const BASE_PATH = self.registration.scope;
 
 const FILES_TO_CACHE = [
-  "./",
-  "./index.html",
-  "./manifest.json",
-  "./icon-192.png",
-  "./icon-512.png"
+  BASE_PATH,
+  BASE_PATH + "index.html",
+  BASE_PATH + "manifest.json",
+  BASE_PATH + "icon-192.png",
+  BASE_PATH + "icon-512.png"
 ];
 
 self.addEventListener("install", event => {
@@ -31,12 +32,17 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
+  // Handle direct app launch & deep links
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      caches.match(BASE_PATH + "index.html")
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then(response => {
       return response || fetch(event.request);
     })
   );
 });
-
-
-
