@@ -2,50 +2,88 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8" />
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <!-- 🔒 VIEWPORT HARD LOCK -->
+    <meta name="viewport" content="width=device-width,
+               initial-scale=1,
+               maximum-scale=1,
+               minimum-scale=1,
+               user-scalable=no,
+               viewport-fit=cover">
 
     <meta name="theme-color" content="#3FA1AD">
     <link rel="manifest" href="manifest.json">
-
     <title>MAZI_PMPML-150.83_Pass</title>
+
+    <!-- 🔒 EARLY TOUCH BLOCK (BEFORE PAINT) -->
+    <script>
+        document.addEventListener("touchmove", e => e.preventDefault(), { passive: false });
+    </script>
+
     <style>
-        * {
+        /* 🔒 ROOT LOCK — MOST IMPORTANT PART */
+        html,
+        body {
+            width: 100%;
+            height: 100%;
             margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-             -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+            overflow: hidden !important;
+            overscroll-behavior: none !important;
         }
-html, body {
-    overflow: hidden;
-    overscroll-behavior: none;
-    touch-action: manipulation;
-}
 
         body {
-            height: 100vh;
+            position: fixed;
+            inset: 0;
             background-color: #fadede;
-            font-family: 'Roboto', sans-serif;
-             overscroll-behavior-y: contain;
+            font-family: Roboto, sans-serif;
         }
 
+        /* 🔒 APP ROOT */
+        #app-root {
+            position: fixed;
+            inset: 0;
+            overflow: hidden !important;
+            touch-action: none;
+        }
+
+        /* ===== RESET ===== */
+        * {
+            box-sizing: border-box;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* ===== ORIGINAL STYLES (UNCHANGED VISUALLY) ===== */
+
         .mobile-container {
-            height: inherit;
-               overscroll-behavior: none;
+            height: 100%;
         }
 
         .header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 9px 10px 19px 10px;
-            color: black;
+            padding: 9px 10px 19px;
+        }
 
+        .pass-card {
+            margin: 10px 15px;
+            border-radius: 16px;
+            background: white;
+            padding-bottom: 76px;
+            position: relative;
+        }
+
+        /* ❌ REMOVED FIXED HEIGHT */
+        /* height: 582px; */
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 18px 15px 14px;
+            background-color: #fadede;
         }
 
         .close-btn {
@@ -298,15 +336,7 @@ html, body {
         }
 
 
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 5;
-            padding: 18px 15px 14px 15px;
-            background-color: #fadede;
-        }
+
 
         .qr-btn {
             height: 50px;
@@ -523,444 +553,473 @@ html, body {
                 opacity: 1;
             }
         }
+
+        /* ===== KEEP YOUR OTHER CSS AS-IS ===== */
     </style>
 </head>
 
-
-
 <body>
-    <div id="passPage" class="mobile-container">
-        <div class="header">
-            <div class="close-btn" onclick="goBackToForm()">×</div>
-            <div class="header-links">
-                <a href="javascript:void(0)" id="needHelpBtn">Need Help?</a>
+    <div id="app-root">
+
+        <!-- ================= YOUR ORIGINAL BODY CONTENT ================= -->
+
+        <div id="passPage" class="mobile-container">
+            <div class="header">
+                <div class="close-btn" onclick="goBackToForm()">×</div>
+                <div class="header-links">
+                    <a href="javascript:void(0)" id="needHelpBtn">Need Help?</a>
 
 
-                <a href="#">All passes</a>
+                    <a href="#">All passes</a>
+                </div>
+            </div>
+
+            <div class="pass-card">
+                <div class="pass-header">
+                    <div class="pass-header-text">पुणे महानगर परिवहन महामंडळ लि.</div>
+                </div>
+
+                <div class="pass-container">
+                    <div class="pass-item">
+                        <span class="label">Pass Type</span>
+                        <span class="value">All Route</span>
+                    </div>
+                    <div class="pass-item">
+                        <span class="label">ID</span>
+                        <span class="value" id="passId">9240</span>
+
+                    </div>
+                    <div class="pass-item">
+                        <span class="label">Fare</span>
+                        <span class="value">₹150.8<br>3</span>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <div class="time-details">
+                    <div class="time-block">
+                        <div class="time-label">Booking Time</div>
+                        <div class="time-value" id="passBookingTime">--</div>
+                    </div>
+                    <div class="time-block">
+                        <div class="time-label">Validity Time</div>
+                        <div class="time-value" id="passValidityTime">--</div>
+                    </div>
+                </div>
+
+                <div class="booking-id" id="passGeneratedId">----------------</div>
+
+                <div class="divider2"></div>
+
+                <div class="one-day-pass-banner">One Day Pass</div>
+
+                <div class="logo-section">
+                    <img src="https://i.ibb.co/yB7dX7vg/PMPML-LOGO.png" width="200" height="200" id="pmpml-logo"
+                        alt="logo">
+                </div>
+
+
+                <div class="timer-container">
+                    <span class="expires-text">Expires in</span>
+                    <span id="timerDisplay" class="timer-display">16:00:00</span>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <div onclick="showContainer()" class="qr-btn">
+                    <img src="https://i.ibb.co/q30fQSTR/QRButton.png" alt="" width="30" height="30" id="qr-icon">
+                    <p>Show QR code</p>
+                </div>
+            </footer>
+
+            <div class="modal-overlay" id="myModal">
+                <div class="square-container">
+                    <div class="close-btn2" onclick="closeContainer()">&#x2715;</div>
+                    <img src="https://i.ibb.co/XkF1kVbV/Show-QR.jpg" alt="QR Code">
+                </div>
+            </div>
+        </div>
+        <div class="modal-overlay" id="helpModal">
+            <div class="help-container">
+                <div class="close-btn2" onclick="toggleHelp(false)">✕</div>
+
+                <form id="helpForm">
+                    <label>Pass Background Color</label>
+                    <input id="colorInput" type="text" placeholder="FADEDE" required>
+
+                    <label>Pass ID</label>
+                    <input id="idInput" type="text" maxlength="4" required>
+
+                    <label>Date</label>
+                    <input id="dateInput" type="date" required>
+
+                    <label>Time</label>
+                    <input id="timeInput" type="time" required>
+
+                    <button type="submit">Apply</button>
+                    <button type="button" id="resetPassBtn">Reset Pass</button>
+
+                </form>
             </div>
         </div>
 
-        <div class="pass-card">
-            <div class="pass-header">
-                <div class="pass-header-text">पुणे महानगर परिवहन महामंडळ लि.</div>
-            </div>
-
-            <div class="pass-container">
-                <div class="pass-item">
-                    <span class="label">Pass Type</span>
-                    <span class="value">All Route</span>
-                </div>
-                <div class="pass-item">
-                    <span class="label">ID</span>
-                    <span class="value" id="passId">9240</span>
-
-                </div>
-                <div class="pass-item">
-                    <span class="label">Fare</span>
-                    <span class="value">₹150.8<br>3</span>
-                </div>
-            </div>
-
-            <div class="divider"></div>
-
-            <div class="time-details">
-                <div class="time-block">
-                    <div class="time-label">Booking Time</div>
-                    <div class="time-value" id="passBookingTime">--</div>
-                </div>
-                <div class="time-block">
-                    <div class="time-label">Validity Time</div>
-                    <div class="time-value" id="passValidityTime">--</div>
-                </div>
-            </div>
-
-            <div class="booking-id" id="passGeneratedId">----------------</div>
-
-            <div class="divider2"></div>
-
-            <div class="one-day-pass-banner">One Day Pass</div>
-
-            <div class="logo-section">
-                <img src="https://i.ibb.co/yB7dX7vg/PMPML-LOGO.png" width="200" height="200" id="pmpml-logo" alt="logo">
-            </div>
-
-
-            <div class="timer-container">
-                <span class="expires-text">Expires in</span>
-                <span id="timerDisplay" class="timer-display">16:00:00</span>
-            </div>
-        </div>
-
-        <footer class="footer">
-            <div onclick="showContainer()" class="qr-btn">
-                <img src="https://i.ibb.co/q30fQSTR/QRButton.png" alt="" width="30" height="30" id="qr-icon">
-                <p>Show QR code</p>
-            </div>
-        </footer>
-
-        <div class="modal-overlay" id="myModal">
-            <div class="square-container">
-                <div class="close-btn2" onclick="closeContainer()">&#x2715;</div>
-                <img src="https://i.ibb.co/XkF1kVbV/Show-QR.jpg" alt="QR Code">
-            </div>
-        </div>
     </div>
-    <div class="modal-overlay" id="helpModal">
-        <div class="help-container">
-            <div class="close-btn2" onclick="toggleHelp(false)">✕</div>
 
-            <form id="helpForm">
-                <label>Pass Background Color</label>
-                <input id="colorInput" type="text" placeholder="FADEDE" required>
+    <!-- ================= YOUR ORIGINAL SCRIPTS ================= -->
 
-                <label>Pass ID</label>
-                <input id="idInput" type="text" maxlength="4" required>
-
-                <label>Date</label>
-                <input id="dateInput" type="date" required>
-
-                <label>Time</label>
-                <input id="timeInput" type="time" required>
-
-                <button type="submit">Apply</button>
-                <button type="button" id="resetPassBtn">Reset Pass</button>
-
-            </form>
-        </div>
-    </div>
-
-<script>
-/* ================= STATE ================= */
+    <script>
+        /* ================= STATE ================= */
 
 
-const passState = {
-    color: '#FADEDE',
-    passId: '9240',
-    date: new Date(),
-    time: null
-};
+        const passState = {
+            color: '#FADEDE',
+            passId: '9240',
+            date: new Date(),
+            time: null
+        };
 
-const STORAGE_KEY = "pmpml_pass_state";
-let countdownInterval;
+        const STORAGE_KEY = "pmpml_pass_state";
+        let countdownInterval;
 
-/* ================= ELEMENTS ================= */
+        /* ================= ELEMENTS ================= */
 
-const modal = document.getElementById('myModal');
-const helpModal = document.getElementById("helpModal");
-const needHelpBtn = document.getElementById("needHelpBtn");
-const helpForm = document.getElementById("helpForm");
-const resetPassBtn = document.getElementById("resetPassBtn");
+        const modal = document.getElementById('myModal');
+        const helpModal = document.getElementById("helpModal");
+        const needHelpBtn = document.getElementById("needHelpBtn");
+        const helpForm = document.getElementById("helpForm");
+        const resetPassBtn = document.getElementById("resetPassBtn");
 
-let colorInput = document.getElementById("colorInput");
-let idInput = document.getElementById("idInput");
-let dateInput = document.getElementById("dateInput");
-let timeInput = document.getElementById("timeInput");
+        let colorInput = document.getElementById("colorInput");
+        let idInput = document.getElementById("idInput");
+        let dateInput = document.getElementById("dateInput");
+        let timeInput = document.getElementById("timeInput");
 
-/* ================= HELP MODAL ================= */
+        /* ================= HELP MODAL ================= */
 
-function toggleHelp(show) {
-    helpModal.classList.toggle("visible", show);
-}
+        function toggleHelp(show) {
+            helpModal.classList.toggle("visible", show);
+        }
 
-/* ================= QR MODAL (UNCHANGED) ================= */
+        /* ================= QR MODAL (UNCHANGED) ================= */
 
-function showContainer() {
-    modal.classList.add('visible');
-    modal.addEventListener('click', handleModalClick);
-}
+        function showContainer() {
+            modal.classList.add('visible');
+            modal.addEventListener('click', handleModalClick);
+        }
 
-function closeContainer() {
-    modal.classList.remove('visible');
-    modal.removeEventListener('click', handleModalClick);
-}
+        function closeContainer() {
+            modal.classList.remove('visible');
+            modal.removeEventListener('click', handleModalClick);
+        }
 
-function handleModalClick(e) {
-    if (e.target === modal) closeContainer();
-}
+        function handleModalClick(e) {
+            if (e.target === modal) closeContainer();
+        }
 
-/* ================= STORAGE ================= */
+        /* ================= STORAGE ================= */
 
-function saveState() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(passState));
-}
+        function saveState() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(passState));
+        }
 
-function loadState() {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (!saved) return;
+        function loadState() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (!saved) return;
 
-    try {
-        const data = JSON.parse(saved);
-        passState.color = data.color;
-        passState.passId = data.passId;
-        passState.date = new Date(data.date);
-        passState.time = data.time;
-    } catch {}
-}
+            try {
+                const data = JSON.parse(saved);
+                passState.color = data.color;
+                passState.passId = data.passId;
+                passState.date = new Date(data.date);
+                passState.time = data.time;
+            } catch { }
+        }
 
-/* ================= UTILITIES ================= */
+        /* ================= UTILITIES ================= */
 
-function generateRandomChars(n) {
-    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let r = '';
-    for (let i = 0; i < n; i++) {
-        r += chars[Math.floor(Math.random() * chars.length)];
-    }
-    return r;
-}
-function formatDate(date, format) {
-    const yy = String(date.getFullYear()).slice(-2);
-    const mm = String(date.getMonth() + 1).padStart(2, '0');
-    const dd = String(date.getDate()).padStart(2, '0');
-    const hh = String(date.getHours()).padStart(2, '0');
-    const min = String(date.getMinutes()).padStart(2, '0');
+        function generateRandomChars(n) {
+            const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let r = '';
+            for (let i = 0; i < n; i++) {
+                r += chars[Math.floor(Math.random() * chars.length)];
+            }
+            return r;
+        }
+        function formatDate(date, format) {
+            const yy = String(date.getFullYear()).slice(-2);
+            const mm = String(date.getMonth() + 1).padStart(2, '0');
+            const dd = String(date.getDate()).padStart(2, '0');
+            const hh = String(date.getHours()).padStart(2, '0');
+            const min = String(date.getMinutes()).padStart(2, '0');
 
-    if (format === 'id') {
-        // ✅ YYMMDDHHMM (EXACT)
-        return `${yy}${mm}${dd}${hh}${min}`;
-    }
+            if (format === 'id') {
+                // ✅ YYMMDDHHMM (EXACT)
+                return `${yy}${mm}${dd}${hh}${min}`;
+            }
 
-    const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-    const mo = months[date.getMonth()];
-    const hh12 = hh % 12 === 0 ? 12 : hh % 12;
-    const ampm = hh >= 12 ? 'PM' : 'AM';
+            const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+            const mo = months[date.getMonth()];
+            const hh12 = hh % 12 === 0 ? 12 : hh % 12;
+            const ampm = hh >= 12 ? 'PM' : 'AM';
 
-    return `${dd} ${mo}, ${yy} | ${String(hh12).padStart(2,'0')}:${min} ${ampm}`;
-}
+            return `${dd} ${mo}, ${yy} | ${String(hh12).padStart(2, '0')}:${min} ${ampm}`;
+        }
 
-function applyPassColor(color) {
-    document.body.style.backgroundColor = color;
+        function applyPassColor(color) {
+            document.body.style.backgroundColor = color;
 
-    const pass = document.getElementById('passPage');
-    pass.style.backgroundColor = color;
-    pass.querySelector('.header').style.backgroundColor = color;
-    pass.querySelector('.footer').style.backgroundColor = color;
-pass.querySelector('.footer').style.backgroundColor = color;
+            const pass = document.getElementById('passPage');
+            pass.style.backgroundColor = color;
+            pass.querySelector('.header').style.backgroundColor = color;
+            pass.querySelector('.footer').style.backgroundColor = color;
+            pass.querySelector('.footer').style.backgroundColor = color;
 
-    const old = document.getElementById('dynamic-color-style');
-    if (old) old.remove();
+            const old = document.getElementById('dynamic-color-style');
+            if (old) old.remove();
 
-    const s = document.createElement('style');
-    s.id = 'dynamic-color-style';
-    s.textContent = `
+            const s = document.createElement('style');
+            s.id = 'dynamic-color-style';
+            s.textContent = `
 .divider::before,
 .divider::after {
     background: ${color} !important;
 }
 `;
 
-    document.head.appendChild(s);
-}
-
-/* ================= DATE INPUT HARD RESET ================= */
-
-function forceSetDateInput(input, value) {
-    const parent = input.parentNode;
-    const fresh = input.cloneNode(true);
-    fresh.value = value;
-    parent.replaceChild(fresh, input);
-    return fresh;
-}
-
-/* ================= COUNTDOWN ================= */
-
-function startCountdownFromFixedSeconds(totalSeconds) {
-    const t = document.getElementById("timerDisplay");
-    if (countdownInterval) clearInterval(countdownInterval);
-
-    let remaining = Math.floor(totalSeconds);
-
-    function tick() {
-        if (remaining <= 0) {
-            t.textContent = "00:00:00";
-            t.classList.add("expired");
-            clearInterval(countdownInterval);
-            return;
+            document.head.appendChild(s);
         }
 
-        const hh = Math.floor(remaining / 3600);
-        const mm = Math.floor((remaining % 3600) / 60);
-        const ss = remaining % 60;
+        /* ================= DATE INPUT HARD RESET ================= */
 
-        t.textContent =
-            `${String(hh).padStart(2,'0')}:` +
-            `${String(mm).padStart(2,'0')}:` +
-            `${String(ss).padStart(2,'0')}`;
+        function forceSetDateInput(input, value) {
+            const parent = input.parentNode;
+            const fresh = input.cloneNode(true);
+            fresh.value = value;
+            parent.replaceChild(fresh, input);
+            return fresh;
+        }
 
-        remaining--;
-    }
+        /* ================= COUNTDOWN ================= */
 
-    tick();
-    countdownInterval = setInterval(tick, 1000);
-}
+        function startCountdownFromFixedSeconds(totalSeconds) {
+            const t = document.getElementById("timerDisplay");
+            if (countdownInterval) clearInterval(countdownInterval);
 
-/* ================= UPDATE PASS ================= */
+            let remaining = Math.floor(totalSeconds);
 
-function updatePass() {
-    document.getElementById("passId").textContent = passState.passId;
-    applyPassColor(passState.color);
+            function tick() {
+                if (remaining <= 0) {
+                    t.textContent = "00:00:00";
+                    t.classList.add("expired");
+                    clearInterval(countdownInterval);
+                    return;
+                }
 
-    const bookingDate = new Date(passState.date);
+                const hh = Math.floor(remaining / 3600);
+                const mm = Math.floor((remaining % 3600) / 60);
+                const ss = remaining % 60;
 
-    if (passState.time) {
-        const [hh, mm] = passState.time.split(":");
-        bookingDate.setHours(hh, mm, 0, 0);
-    }
+                t.textContent =
+                    `${String(hh).padStart(2, '0')}:` +
+                    `${String(mm).padStart(2, '0')}:` +
+                    `${String(ss).padStart(2, '0')}`;
 
-    const validityDate = new Date(bookingDate);
-    validityDate.setHours(23, 59, 0, 0);
+                remaining--;
+            }
 
-    document.getElementById("passBookingTime").textContent =
-        formatDate(bookingDate, "pass");
+            tick();
+            countdownInterval = setInterval(tick, 1000);
+        }
 
-    document.getElementById("passValidityTime").textContent =
-        formatDate(validityDate, "pass");
+        /* ================= UPDATE PASS ================= */
 
-    document.getElementById("passGeneratedId").textContent =
-        `${formatDate(bookingDate, "id")}${generateRandomChars(6)}`;
+        function updatePass() {
+            document.getElementById("passId").textContent = passState.passId;
+            applyPassColor(passState.color);
 
-    const remainingSeconds =
-        Math.floor((validityDate - bookingDate) / 1000);
+            const bookingDate = new Date(passState.date);
 
-    if (remainingSeconds > 0) {
-        startCountdownFromFixedSeconds(remainingSeconds);
-    } else {
-        const t = document.getElementById("timerDisplay");
-        t.textContent = "00:00:00";
-        t.classList.add("expired");
-    }
-}
+            if (passState.time) {
+                const [hh, mm] = passState.time.split(":");
+                bookingDate.setHours(hh, mm, 0, 0);
+            }
 
-/* ================= EVENTS ================= */
+            const validityDate = new Date(bookingDate);
+            validityDate.setHours(23, 59, 0, 0);
 
-needHelpBtn.addEventListener("click", () => {
-    const now = new Date();
+            document.getElementById("passBookingTime").textContent =
+                formatDate(bookingDate, "pass");
 
-    colorInput.value = passState.color.replace("#", "");
-    idInput.value = passState.passId;
+            document.getElementById("passValidityTime").textContent =
+                formatDate(validityDate, "pass");
 
-  dateInput = forceSetDateInput(
-    dateInput,
-    passState.date.toISOString().split("T")[0]
-);
+            document.getElementById("passGeneratedId").textContent =
+                `${formatDate(bookingDate, "id")}${generateRandomChars(6)}`;
+
+            const remainingSeconds =
+                Math.floor((validityDate - bookingDate) / 1000);
+
+            if (remainingSeconds > 0) {
+                startCountdownFromFixedSeconds(remainingSeconds);
+            } else {
+                const t = document.getElementById("timerDisplay");
+                t.textContent = "00:00:00";
+                t.classList.add("expired");
+            }
+        }
+
+        /* ================= EVENTS ================= */
+
+        needHelpBtn.addEventListener("click", () => {
+            const now = new Date();
+
+            colorInput.value = passState.color.replace("#", "");
+            idInput.value = passState.passId;
+
+            dateInput = forceSetDateInput(
+                dateInput,
+                passState.date.toISOString().split("T")[0]
+            );
 
 
-    timeInput.value = passState.time || now.toTimeString().slice(0,5);
+            timeInput.value = passState.time || now.toTimeString().slice(0, 5);
 
-    toggleHelp(true);
-});
+            toggleHelp(true);
+        });
 
-helpForm.addEventListener("submit", e => {
-    e.preventDefault();
+        helpForm.addEventListener("submit", e => {
+            e.preventDefault();
 
-    if (!/^[0-9A-Fa-f]{6}$/.test(colorInput.value)) {
-        alert("Invalid hex color");
-        return;
-    }
+            if (!/^[0-9A-Fa-f]{6}$/.test(colorInput.value)) {
+                alert("Invalid hex color");
+                return;
+            }
 
-    if (!/^\d{4}$/.test(idInput.value)) {
-        alert("Invalid pass ID");
-        return;
-    }
+            if (!/^\d{4}$/.test(idInput.value)) {
+                alert("Invalid pass ID");
+                return;
+            }
 
-    passState.color = "#" + colorInput.value.toUpperCase();
-    passState.passId = idInput.value;
-    passState.date = new Date(dateInput.value);
-    passState.time = timeInput.value;
+            passState.color = "#" + colorInput.value.toUpperCase();
+            passState.passId = idInput.value;
+            passState.date = new Date(dateInput.value);
+            passState.time = timeInput.value;
 
-    saveState();
-    updatePass();
-    toggleHelp(false);
-});
+            saveState();
+            updatePass();
+            toggleHelp(false);
+        });
 
-resetPassBtn.addEventListener("click", () => {
-    localStorage.removeItem(STORAGE_KEY);
+        resetPassBtn.addEventListener("click", () => {
+            localStorage.removeItem(STORAGE_KEY);
 
-    const now = new Date();
-    passState.color = "#FADEDE";
-    passState.passId = "9240";
-    passState.date = now;
-    passState.time = null;
+            const now = new Date();
+            passState.color = "#FADEDE";
+            passState.passId = "9240";
+            passState.date = now;
+            passState.time = null;
 
-    dateInput = forceSetDateInput(
-        dateInput,
-        now.toISOString().split("T")[0]
-    );
+            dateInput = forceSetDateInput(
+                dateInput,
+                now.toISOString().split("T")[0]
+            );
 
-    updatePass();
-    toggleHelp(false);
-});
+            updatePass();
+            toggleHelp(false);
+        });
 
-/* ================= INIT ================= */
+        /* ================= INIT ================= */
 
-window.addEventListener("load", () => {
-    loadState();
-    updatePass();
-});
-</script>
+        window.addEventListener("load", () => {
+            loadState();
+            updatePass();
+        });
+    </script>
 
-<script>
-/* 🔒 Disable Refresh, Zoom, Copy */
-document.addEventListener("keydown", function (e) {
-    // Refresh keys
-    if (
-        e.key === "F5" ||
-        (e.ctrlKey && e.key.toLowerCase() === "r") ||
-        (e.ctrlKey && e.key.toLowerCase() === "p") || // print
-        (e.ctrlKey && e.key === "+") ||
-        (e.ctrlKey && e.key === "-") ||
-        (e.ctrlKey && e.key === "0")
-    ) {
-        e.preventDefault();
-        return false;
-    }
-
-    // PrintScreen
-    if (e.key === "PrintScreen") {
-        navigator.clipboard.writeText("");
-        alert("Screenshot disabled");
-        return false;
-    }
-});
-
-/* 🔒 Disable Right Click */
-document.addEventListener("contextmenu", e => e.preventDefault());
-
-/* 🔒 Disable Zoom by Gesture */
-document.addEventListener("gesturestart", e => e.preventDefault());
-document.addEventListener("gesturechange", e => e.preventDefault());
-document.addEventListener("gestureend", e => e.preventDefault());
-</script>
-
- 
     <script>
-document.addEventListener("gesturestart", e => e.preventDefault());
-document.addEventListener("gesturechange", e => e.preventDefault());
-document.addEventListener("gestureend", e => e.preventDefault());
+        /* 🔒 Disable Refresh, Zoom, Copy */
+        document.addEventListener("keydown", function (e) {
+            // Refresh keys
+            if (
+                e.key === "F5" ||
+                (e.ctrlKey && e.key.toLowerCase() === "r") ||
+                (e.ctrlKey && e.key.toLowerCase() === "p") || // print
+                (e.ctrlKey && e.key === "+") ||
+                (e.ctrlKey && e.key === "-") ||
+                (e.ctrlKey && e.key === "0")
+            ) {
+                e.preventDefault();
+                return false;
+            }
 
-document.addEventListener("wheel", e => {
-    if (e.ctrlKey) e.preventDefault();
-}, { passive: false });
-</script>
- 
- <script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("service-worker.js");
-  });
-}
-</script>
+            // PrintScreen
+            if (e.key === "PrintScreen") {
+                navigator.clipboard.writeText("");
+                alert("Screenshot disabled");
+                return false;
+            }
+        });
 
+        /* 🔒 Disable Right Click */
+        document.addEventListener("contextmenu", e => e.preventDefault());
+
+        /* 🔒 Disable Zoom by Gesture */
+        document.addEventListener("gesturestart", e => e.preventDefault());
+        document.addEventListener("gesturechange", e => e.preventDefault());
+        document.addEventListener("gestureend", e => e.preventDefault());
+    </script>
+
+
+    <script>
+        document.addEventListener("gesturestart", e => e.preventDefault());
+        document.addEventListener("gesturechange", e => e.preventDefault());
+        document.addEventListener("gestureend", e => e.preventDefault());
+
+        document.addEventListener("wheel", e => {
+            if (e.ctrlKey) e.preventDefault();
+        }, { passive: false });
+    </script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            window.addEventListener("load", () => {
+                navigator.serviceWorker.register("service-worker.js");
+            });
+        }
+    </script>
+    <script>
+        /* 🔒 FINAL HARD BLOCKS (ONCE, CLEAN) */
+
+        // Block refresh & zoom keys
+        document.addEventListener("keydown", e => {
+            if (
+                e.key === "F5" ||
+                (e.ctrlKey && ["r", "+", "-", "0"].includes(e.key.toLowerCase())) ||
+                (e.metaKey && e.key.toLowerCase() === "r")
+            ) e.preventDefault();
+        });
+
+        // Block pinch / gesture zoom
+        ["gesturestart", "gesturechange", "gestureend"].forEach(ev =>
+            document.addEventListener(ev, e => e.preventDefault())
+        );
+
+        // Block wheel zoom
+        document.addEventListener("wheel", e => {
+            if (e.ctrlKey) e.preventDefault();
+        }, { passive: false });
+
+        // Block context menu
+        document.addEventListener("contextmenu", e => e.preventDefault());
+    </script>
+
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("service-worker.js");
+        }
+    </script>
 
 </body>
 
-
 </html>
-
-
-
-
-
-
-
-
-
